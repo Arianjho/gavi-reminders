@@ -4,8 +4,8 @@
   "private": true,
   "scripts": {
     "start": "expo start",
-    "android": "expo start --android",
-    "ios": "expo start --ios",
+    "android": "expo run:android",
+    "ios": "expo run:ios",
     "web": "expo start --web",
     "eas-build-pre-install": "corepack enable && yarn set version 4.13.0 && yarn install"
   },
@@ -75,5 +75,6 @@
     "react-test-renderer": "19.1.0",
     "typescript": "~5.9.2"
   },
-  "packageManager": "yarn@4.13.0"
+  "packageManager": "yarn@4.13.0",
+  "version": "1.0.0"
 }
