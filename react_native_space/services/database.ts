@@ -39,10 +39,11 @@ async function getDb(): Promise<SQLite.SQLiteDatabase> {
 
 export async function initDatabase(): Promise<void> {
   const db = await getDb();
-  await db.execAsync(`
-    PRAGMA journal_mode = WAL;
-    PRAGMA foreign_keys = ON;
+  // PRAGMAs separated so a failure here doesn't block table creation
+  try { await db.execAsync('PRAGMA journal_mode = WAL;'); } catch { /* no-op */ }
+  try { await db.execAsync('PRAGMA foreign_keys = ON;'); } catch { /* no-op */ }
 
+  await db.execAsync(`
     CREATE TABLE IF NOT EXISTS List (
       id TEXT PRIMARY KEY,
       name TEXT NOT NULL,

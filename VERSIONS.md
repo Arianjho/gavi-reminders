@@ -4,6 +4,15 @@ Historial de cambios por versión. Actualizar al final de cada sesión de trabaj
 
 ---
 
+## v1.1.2 — 2026-06-28
+
+**Correcciones**
+- `initDatabase`: PRAGMAs separados del `execAsync` de CREATE TABLE — en algunos Android el PRAGMA WAL fallaba y dejaba sin tablas, causando que todos los INSERT fallaran silenciosamente
+- `saveNewReminder` / `editReminder`: DB y notificaciones ahora separadas. `triggerRefresh()` siempre se llama tras guardar en DB. Notificaciones son fire-and-forget y nunca pueden bloquear ni romper el guardado
+- `versionCode` 4, version 1.1.2
+
+---
+
 ## v1.1.1 — 2026-06-28
 
 **Cambios**

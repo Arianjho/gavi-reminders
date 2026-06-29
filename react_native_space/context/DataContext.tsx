@@ -76,23 +76,29 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const saveNewReminder = useCallback(
     async (input: ReminderInput): Promise<string | null> => {
+      let id: string;
       try {
-        const id = await createReminder(input);
-        const notifId = await scheduleReminderNotification(
-          input.title,
-          input.notes ?? null,
-          input.date ?? null,
-          input.time ?? null,
-          input.recurrence ?? null,
-          input.advanceMinutes ?? 0,
-          input.repeatDays ?? null
-        );
-        if (notifId) await setReminderNotificationId(id, notifId);
-        triggerRefresh();
-        return id;
-      } catch {
+        id = await createReminder(input);
+      } catch (e) {
+        console.error('[DataContext] createReminder failed:', e);
         return null;
       }
+      triggerRefresh();
+      // Notification scheduling is fire-and-forget — never blocks the save
+      scheduleReminderNotification(
+        input.title,
+        input.notes ?? null,
+        input.date ?? null,
+        input.time ?? null,
+        input.recurrence ?? null,
+        input.advanceMinutes ?? 0,
+        input.repeatDays ?? null
+      )
+        .then((notifId) => {
+          if (notifId) setReminderNotificationId(id, notifId).catch(() => {});
+        })
+        .catch(() => {});
+      return id;
     },
     [triggerRefresh]
   );
@@ -106,20 +112,24 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({
       try {
         await cancelReminderNotification(previousNotificationId);
         await updateReminder(id, input);
-        const notifId = await scheduleReminderNotification(
-          input.title,
-          input.notes ?? null,
-          input.date ?? null,
-          input.time ?? null,
-          input.recurrence ?? null,
-          input.advanceMinutes ?? 0,
-          input.repeatDays ?? null
-        );
-        await setReminderNotificationId(id, notifId);
-        triggerRefresh();
-      } catch {
-        // no-op
+      } catch (e) {
+        console.error('[DataContext] updateReminder failed:', e);
+        return;
       }
+      triggerRefresh();
+      scheduleReminderNotification(
+        input.title,
+        input.notes ?? null,
+        input.date ?? null,
+        input.time ?? null,
+        input.recurrence ?? null,
+        input.advanceMinutes ?? 0,
+        input.repeatDays ?? null
+      )
+        .then((notifId) => {
+          setReminderNotificationId(id, notifId).catch(() => {});
+        })
+        .catch(() => {});
     },
     [triggerRefresh]
   );
