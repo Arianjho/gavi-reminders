@@ -4,6 +4,20 @@ Historial de cambios por versión. Actualizar al final de cada sesión de trabaj
 
 ---
 
+## v1.1.1 — 2026-06-28
+
+**Cambios**
+- Nuevo ícono de app generado desde `assets/logo-gavi-reminder.png`
+- Todos los assets de ícono regenerados: `icon.png`, `android-icon-foreground.png`, `android-icon-background.png`, `android-icon-monochrome.png`, `favicon.png`, `splash-icon.png`
+- `app.json`: `backgroundColor` del adaptive icon actualizado a `#79cde6` (color real del logo)
+- `versionCode` bumpeado a 3
+
+**Notas**
+- Instalar desinstalando primero si ya tenías v1.1.0 con otra firma (ver v1.1.0)
+- Build: ninja 1.12.1 + `android.cxx.buildStagingDirectory=C:\b` para evitar MAX_PATH
+
+---
+
 ## v1.1.0 — 2026-06-28
 
 **Features nuevas**
